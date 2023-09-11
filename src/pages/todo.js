@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 
+import "../styles/todo.css"
+
 const TodoPage = () => {
   const [todos, setTodos] = useState([]);
 
@@ -61,11 +63,15 @@ const TodoPage = () => {
 }
 
   return (
-    <div>
-    <h1>This is the Todo page</h1>
+    <div className="wrapper">
+    <h1 className="todo-title">This is the Todo page</h1>
 
     {!showNewTodoInput && !isEditing && (
-    <button onClick={() => setShowNewTodoInput(true)}>새로운 todo 만들기</button>
+    <button 
+      onClick={() => setShowNewTodoInput(true)}
+      className="todo-maker">
+        새로운 todo 만들기
+    </button>
     )}
 
     {(showNewTodoInput || isEditing )&& (
@@ -76,8 +82,13 @@ const TodoPage = () => {
     value={newTodoText}
     onChange={handleInputChange}
     placeholder="할 일을 입력하세요"
+    className="todo-input"
     />
-    <button onClick={isEditing ? handleApplyEdits : handleAddTodo}>{isEditing ? "수정하기" : "추가"}</button>
+    <button 
+      onClick={isEditing ? handleApplyEdits : handleAddTodo}
+      className="add-btn">
+        {isEditing ? "수정하기" : "추가"}
+    </button>
     </>
     )}
 
