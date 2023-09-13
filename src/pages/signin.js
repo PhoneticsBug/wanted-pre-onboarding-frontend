@@ -21,9 +21,9 @@ const Signin = () => {
       alert("Please enter a valid email and password.");
       return;
     }
-
+  
     axios
-      .post("/auth/signin", {
+      .post("https://www.pre-onboarding-selection-task.shop/auth/signin", {
         email: email,
         password: password,
       })
@@ -32,7 +32,7 @@ const Signin = () => {
       })
       .catch((error) => {
         console.error(error);
-        alert("Login failed.");
+        alert("Please check your email or password")
       });
   };
 
