@@ -1,9 +1,7 @@
 import React, { useState } from "react";
-import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
 const Signup = () => {
-
   const navigate = useNavigate();
 
   const [email, setEmail] = useState(""); // 이메일
@@ -24,7 +22,7 @@ const Signup = () => {
     const pattern =
       /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
     return pattern.test(String(email).toLowerCase());
-  }
+  };
 
   const onClickSubmit = () => {
     if (!validateForm()) {
@@ -33,75 +31,78 @@ const Signup = () => {
   
     setLoading(true);
   
-    fetch('https://www.pre-onboarding-selection-task.shop/api/signup', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+    fetch("https://www.pre-onboarding-selection-task.shop/auth/signup", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         email: email,
         password: password,
         name: name,
       }),
     })
-      .then(response => response.json())
-      .then(data => {
-        setLoading(false);
-        
-        // 응답에 따른 로직 추가
-        if (data.success) { // success 필드가 있다고 가정
-          navigate("/home");
-          setMsg("Signup successful!");
-        } else {
-          throw new Error(data.message || "Signup failed.");
+      .then((response) => {
+        if (response.status === 400) { // Bad Request (이미 존재하는 이메일)
+          alert("이메일이 이미 존재합니다.");
+          throw new Error("Email already exists.");
         }
         
+        // return response.json();
+      })
+      .then(() => {
+        setLoading(false);
+        
+        navigate("/home");
+        setMsg("Signup successful!");
+        
+        alert("가입이 완료되었습니다.");
       })
       .catch((error) => {
         setLoading(false);
+        
         console.error(error);
-        setMsg("Signup failed.");
-      });
+        
+         if (error.message === "Email already exists.") { // 이미 존재하는 이메일인 경우
+           setMsg(error.message);
+         } else if (error instanceof SyntaxError && error.message.includes("JSON")) {
+           setMsg("Invalid JSON response from the server.");
+         } else {
+           setMsg("Signup failed.");
+         }
+       });
+   };
+  
+  
+  
+
+  const validateForm = () => {
+    if (!email || !password || !name || !passwordCheck) {
+      alert("Please input every requirement.");
+      return false;
+    }
+
+    if (!validateEmail(email)) {
+      alert("Please provide a valid email address.");
+      return false;
+    }
+
+    if (password !== passwordCheck) {
+      alert("Please make sure your password is right.");
+      return false;
+    }
+
+    return true;
   };
+
+  const handleEmailChange = (e) => setEmail(e.target.value);
   
+const handlePasswordChange=(e)=>setPassword(e.target.value);
 
- const validateForm = () => {
-     if (!email || !password || !name || !passwordCheck) {
-         alert("Please input every requirement.");
-         return false;
-     }
+const handlePasswordCheckChange=(e)=>setPasswordCheck(e.target.value);
 
-     if (!validateEmail(email)) {
-         alert("Please provide a valid email address.");
-         return false;
-     }
-
-     if (password !== passwordCheck) {
-         alert("Please make sure your password is right.");
-         return false;
-     }
-
-     return true;
- };
-
- const handleEmailChange = (e) => {
-       setEmail(e.target.value);
- }
-
- const handlePasswordChange = (e) => {
-       setPassword(e.target.value);
-}
-
-const handlePasswordCheckChange = (e) => {
-       setPasswordCheck(e.target.value);
-}
-
-const handleNameChange = (e) => {
-       setName(e.target.value);
-}
+const handleNameChange=(e)=>setName(e.target.value);
 
 
-   
 return (
-  
  <div className="signup-page">
    <input 
        data-testid="email-input"
@@ -115,27 +116,26 @@ return (
        type="password"
        placeholder="비밀번호"
        value={password}
-      onChange={handlePasswordChange}
+       onChange={handlePasswordChange}
    />
    <input 
-      data-testid="password-check-input"
-      type="password"
-      placeholder="비밀번호 확인"
-      value={passwordCheck}
-      onChange={handlePasswordCheckChange}
-   />
+     data-testid="password-check-input"
+     type="password"
+     placeholder="비밀번호 확인"
+     value={passwordCheck}
+     onChange={handlePasswordCheckChange}
+/>
 <input 
-          type="text"
-          placeholder="이름"
-          value={name}
-          onChange={handleNameChange}
+         type="text"
+         placeholder="이름"
+         value={name}
+         onChange={handleNameChange}
 />
 
 {/* 버튼 클릭 시 onClickSubmit 함수 실행 */}
 <button 
-        data-testid="signup-button" 
-        onClick={onClickSubmit}
->
+         data-testid="signup-button" 
+         onClick={onClickSubmit}>
 회원가입
 </button>
 </div>
