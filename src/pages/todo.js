@@ -95,11 +95,17 @@ const TodoPage = () => {
     <ul>
     {todos.map(td=>(
     <li key={td.id}>
-    <label>
+    <label className="todo-box">
     <input type="checkbox" checked={td.isCompleted} />
     <span>{td.text}</span>
-    <button onClick={() => handleEditClick(td.id)}> 수정 </button> {/* 수정 버튼 클릭 시 해당 todo 수정 */}
-    <button onClick={() => handleDeleteTodo(td.id)}> 삭제 </button> {/* 삭제 버튼 클릭 시 해당 todo 삭제 */}
+    <div className="ed-btn-group">
+    <button 
+      className="edit-delete-btn"
+      onClick={() => handleEditClick(td.id)}> 수정 </button> {/* 수정 버튼 클릭 시 해당 todo 수정 */}
+    <button 
+      className="edit-delete-btn"
+      onClick={() => handleDeleteTodo(td.id)}> 삭제 </button> {/* 삭제 버튼 클릭 시 해당 todo 삭제 */}
+    </div>
     </label>
     </li>
     ))}

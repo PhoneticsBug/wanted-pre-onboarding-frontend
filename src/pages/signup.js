@@ -3,6 +3,7 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
 const Signup = () => {
+
   const navigate = useNavigate();
 
   const [email, setEmail] = useState(""); // 이메일
@@ -18,29 +19,41 @@ const Signup = () => {
    * @param {string} email - 검사할 이메일 주소
    * @returns {boolean} - 유효한 형식인 경우 true 반환
    */
-  function validateEmail(email) {
+  const validateEmail = (email) => {
     // 간단한 이메일 정규식 패턴 사용
     const pattern =
       /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
     return pattern.test(String(email).toLowerCase());
   }
 
-  function onClickSubmit() {
+  const onClickSubmit = () => {
     if (!validateForm()) {
       return;
     }
-
+  
     setLoading(true);
-
-    axios.post("/api/signup", {
-      email: email,
-      password: password,
-      name: name,
+  
+    fetch('https://www.pre-onboarding-selection-task.shop/api/signup', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        email: email,
+        password: password,
+        name: name,
+      }),
     })
-      .then((response) => {
+      .then(response => response.json())
+      .then(data => {
         setLoading(false);
-        navigate("/home");
-        setMsg("Signup successful!");
+        
+        // 응답에 따른 로직 추가
+        if (data.success) { // success 필드가 있다고 가정
+          navigate("/home");
+          setMsg("Signup successful!");
+        } else {
+          throw new Error(data.message || "Signup failed.");
+        }
+        
       })
       .catch((error) => {
         setLoading(false);
@@ -48,8 +61,9 @@ const Signup = () => {
         setMsg("Signup failed.");
       });
   };
+  
 
- function validateForm() {
+ const validateForm = () => {
      if (!email || !password || !name || !passwordCheck) {
          alert("Please input every requirement.");
          return false;
@@ -68,23 +82,26 @@ const Signup = () => {
      return true;
  };
 
- function handleEmailChange(e) {
+ const handleEmailChange = (e) => {
        setEmail(e.target.value);
  }
 
- function handlePasswordChange(e) {
+ const handlePasswordChange = (e) => {
        setPassword(e.target.value);
 }
 
-function handlePasswordCheckChange(e) {
+const handlePasswordCheckChange = (e) => {
        setPasswordCheck(e.target.value);
 }
 
-function handleNameChange(e) {
+const handleNameChange = (e) => {
        setName(e.target.value);
 }
+
+
    
 return (
+  
  <div className="signup-page">
    <input 
        data-testid="email-input"
