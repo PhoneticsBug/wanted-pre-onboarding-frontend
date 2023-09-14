@@ -21,13 +21,17 @@ const Signin = ({ setIsSignedIn }) => {
       alert("Please enter a valid email and password.");
       return;
     }
-
+  
     axios
       .post("https://www.pre-onboarding-selection-task.shop/auth/signin", {
         email: email,
         password: password,
       })
       .then((response) => {
+        // 액세스 토큰을 받은 후 로컬 스토리지에 저장
+        const access_token = response.data.access_token;
+        localStorage.setItem("access_token", access_token); // 액세스 토큰을 로컬 스토리지에 저장
+  
         setIsSignedIn(true); // 로그인 상태 업데이트
         navigate("/");
       })
@@ -36,6 +40,7 @@ const Signin = ({ setIsSignedIn }) => {
         alert("Please check your email or password");
       });
   };
+  
 
   const SignUp = () => navigate("/signup");
 

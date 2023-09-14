@@ -1,133 +1,189 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 
-import "../styles/todo.css"
+import "../styles/todo.css";
 
 const TodoPage = () => {
   const [todos, setTodos] = useState([]);
-
+  const [editingTodo, setEditingTodo] = useState(null);
   const [newTodoText, setNewTodoText] = useState("");
-  const [showNewTodoInput, setShowNewTodoInput] = useState(false);
-  
-  // edit mode 관련 state
-  const [isEditing, setIsEditing] = useState(false);
-  const [currentEditId, setCurrentEditId] = useState(null);
+
+  const apiUrl = "https://www.pre-onboarding-selection-task.shop/todos";
+  const access_token = localStorage.getItem("access_token");
+
+  const fetchData = () => {
+    axios
+      .get(apiUrl, {
+        headers: {
+          Authorization: `Bearer ${access_token}`,
+        },
+      })
+      .then((response) => {
+        if (response.status === 200) {
+          setTodos(response.data);
+        } else {
+          console.error("할 일 목록을 불러오는 데 실패했습니다.");
+        }
+      })
+      .catch((error) => {
+        console.error("할 일 목록을 불러오는 데 실패했습니다.", error);
+      });
+  };
 
   useEffect(() => {
-    // 페이지가 로드될 때 Todo 목록을 서버에서 불러옵니다.
-    axios.get("https://www.pre-onboarding-selection-task.shop/todos", {
-      headers: {
-        Authorization: "Bearer access_token", // 여기서 access_token을 실제 토큰으로 대체해야 합니다.
-      },
-    })
-    .then((response) => {
-      setTodos(response.data);
-    })
-    .catch((error) => {
-      console.error("Todo 목록을 불러오는 데 실패했습니다.", error);
-    });
-  }, []);
+    // 페이지가 처음 로드될 때 데이터를 불러옴
+    fetchData();
+  }, []); // 빈 배열을 전달하여 최초 로드시에만 실행되도록 함
 
   const handleAddTodo = () => {
     if (newTodoText.trim() === "") {
-        return;
+      return;
     }
+
     const newTodo = {
-        id: todos.length + 1,
-        text: newTodoText,
-        isCompleted: false
+      todo: newTodoText,
+      isCompleted: false,
     };
 
-    setTodos(prevTodos => [...prevTodos, newTodo]);
-    setNewTodoText("");
-    setShowNewTodoInput(false);
+    axios
+      .post(apiUrl, newTodo, {
+        headers: {
+          Authorization: `Bearer ${access_token}`,
+          "Content-Type": "application/json; charset=utf-8",
+        },
+      })
+      .then((response) => {
+        if (response.status === 201) {
+          // 새로운 todo를 추가하고 상태를 업데이트
+          setTodos((prevTodos) => [...prevTodos, response.data]);
+          setNewTodoText(""); // 입력 필드 초기화
+        } else {
+          console.error("할 일을 추가하는 데 실패했습니다.");
+        }
+      })
+      .catch((error) => {
+        console.error("할 일을 추가하는 데 실패했습니다.", error);
+      });
   };
 
-  const handleInputChange = (e) => {
-    setNewTodoText(e.target.value);
+  const handleToggleTodo = (todo) => {
+    const updatedTodo = { ...todo, isCompleted: !todo.isCompleted };
+
+    axios
+      .put(`${apiUrl}/${todo.id}`, updatedTodo, {
+        headers: {
+          Authorization: `Bearer ${access_token}`,
+          "Content-Type": "application/json; charset=utf-8",
+        },
+      })
+      .then((response) => {
+        if (response.status === 200) {
+          fetchData();
+        } else {
+          console.error("할 일을 수정하는 데 실패했습니다.");
+        }
+      })
+      .catch((error) => {
+        console.error("할 일을 수정하는 데 실패했습니다.", error);
+      });
   };
 
-  // 삭제 함수
-  const handleDeleteTodo = (id) => {
-    setTodos(prevTodos => prevTodos.filter(todo => todo.id !== id));
+  const handleEditClick = (todo) => {
+    setEditingTodo(todo);
+    setNewTodoText(todo.todo);
   };
 
-  // 수정 함수
-  const handleEditClick = (id) => {
-    setIsEditing(true);
-    setCurrentEditId(id);
-    let todoToEdit = todos.find(todo=>todo.id===id)
-    if(todoToEdit){
-        setNewTodoText(todoToEdit.text)
+  const handleSaveEdit = () => {
+    if (newTodoText.trim() === "") {
+      return;
     }
+
+    const updatedTodo = {
+      todo: newTodoText,
+      isCompleted: editingTodo.isCompleted,
+    };
+
+    axios
+      .put(`${apiUrl}/${editingTodo.id}`, updatedTodo, {
+        headers: {
+          Authorization: `Bearer ${access_token}`,
+          "Content-Type": "application/json; charset=utf-8",
+        },
+      })
+      .then((response) => {
+        if (response.status === 200) {
+          fetchData();
+          setEditingTodo(null);
+          setNewTodoText("");
+        } else {
+          console.error("할 일을 수정하는 데 실패했습니다.");
+        }
+      })
+      .catch((error) => {
+        console.error("할 일을 수정하는 데 실패했습니다.", error);
+      });
   };
 
-  // 수정 적용 함수
-  const handleApplyEdits=()=>{
-    let updatedTods=todos.map((todo)=>{
-       if(todo.id===currentEditId){
-         return {...todo,text:newTodoText}
-       }else{
-         return todo;
-       }
-    });
-    
-    setTodos(updatedTods)
-    setIsEditing(false)
-    setCurrentEditId(null)
-    setNewTodoText("")
-}
+  const handleDeleteTodo = (todoId) => {
+    axios
+      .delete(`${apiUrl}/${todoId}`, {
+        headers: {
+          Authorization: `Bearer ${access_token}`,
+        },
+      })
+      .then(() => {
+        fetchData();
+      })
+      .catch((error) => {
+        console.error("할 일을 삭제하는 데 실패했습니다.", error);
+      });
+  };
 
   return (
     <div className="wrapper">
-    <h1 className="todo-title">This is the Todo page</h1>
-
-    {!showNewTodoInput && !isEditing && (
-    <button 
-      onClick={() => setShowNewTodoInput(true)}
-      className="todo-maker">
-        새로운 todo 만들기
-    </button>
-    )}
-
-    {(showNewTodoInput || isEditing )&& (
-    <>
-    {/* 새로운 할 일 입력창 */}
-    <input
-    type="text"
-    value={newTodoText}
-    onChange={handleInputChange}
-    placeholder="할 일을 입력하세요"
-    className="todo-input"
-    />
-    <button 
-      onClick={isEditing ? handleApplyEdits : handleAddTodo}
-      className="add-btn">
-        {isEditing ? "수정하기" : "추가"}
-    </button>
-    </>
-    )}
-
-    <ul>
-    {todos.map(td=>(
-    <li key={td.id}>
-    <label className="todo-box">
-    <input type="checkbox" checked={td.isCompleted} />
-    <span>{td.text}</span>
-    <div className="ed-btn-group">
-    <button 
-      className="edit-delete-btn"
-      onClick={() => handleEditClick(td.id)}> 수정 </button> {/* 수정 버튼 클릭 시 해당 todo 수정 */}
-    <button 
-      className="edit-delete-btn"
-      onClick={() => handleDeleteTodo(td.id)}> 삭제 </button> {/* 삭제 버튼 클릭 시 해당 todo 삭제 */}
+      <h1 className="todo-title">This is the Todo page</h1>
+      <div>
+        <input
+          type="text"
+          value={newTodoText}
+          onChange={(e) => setNewTodoText(e.target.value)}
+          placeholder="할 일을 입력하세요"
+        />
+        <button onClick={handleAddTodo}>추가</button>
+      </div>
+      <div>
+        {todos.map((todo) => (
+            <div key={todo.id}>
+            <input
+                type="checkbox"
+                checked={todo.isCompleted}
+                onChange={() => handleToggleTodo(todo)}
+            />
+            {editingTodo && editingTodo.id === todo.id ? (
+                <div>
+                <input
+                    type="text"
+                    value={newTodoText}
+                    onChange={(e) => setNewTodoText(e.target.value)}
+                />
+                <button onClick={handleSaveEdit}>저장</button>
+                </div>
+            ) : (
+                <span>{todo.todo}</span>
+            )}
+            {editingTodo && editingTodo.id === todo.id ? (
+                null
+            ) : (
+                <>
+                <button onClick={() => handleEditClick(todo)}>수정</button>
+                <button onClick={() => handleDeleteTodo(todo.id)}>삭제</button>
+                </>
+            )}
+            </div>
+        ))}
+        </div>
     </div>
-    </label>
-    </li>
-    ))}
-    </ul>
-    </div>
-  )
+  );
 };
 
 export default TodoPage;
