@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 
 import "../styles/todo.css"
 
@@ -11,6 +12,21 @@ const TodoPage = () => {
   // edit mode 관련 state
   const [isEditing, setIsEditing] = useState(false);
   const [currentEditId, setCurrentEditId] = useState(null);
+
+  useEffect(() => {
+    // 페이지가 로드될 때 Todo 목록을 서버에서 불러옵니다.
+    axios.get("https://www.pre-onboarding-selection-task.shop/todos", {
+      headers: {
+        Authorization: "Bearer access_token", // 여기서 access_token을 실제 토큰으로 대체해야 합니다.
+      },
+    })
+    .then((response) => {
+      setTodos(response.data);
+    })
+    .catch((error) => {
+      console.error("Todo 목록을 불러오는 데 실패했습니다.", error);
+    });
+  }, []);
 
   const handleAddTodo = () => {
     if (newTodoText.trim() === "") {

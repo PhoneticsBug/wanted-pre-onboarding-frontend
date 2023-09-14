@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 
 import "../styles/signin.css";
 
-const Signin = () => {
+const Signin = ({ setIsSignedIn }) => {
   const navigate = useNavigate();
 
   const [email, setEmail] = useState(""); // 이메일
@@ -21,18 +21,19 @@ const Signin = () => {
       alert("Please enter a valid email and password.");
       return;
     }
-  
+
     axios
       .post("https://www.pre-onboarding-selection-task.shop/auth/signin", {
         email: email,
         password: password,
       })
       .then((response) => {
+        setIsSignedIn(true); // 로그인 상태 업데이트
         navigate("/");
       })
       .catch((error) => {
         console.error(error);
-        alert("Please check your email or password")
+        alert("Please check your email or password");
       });
   };
 
