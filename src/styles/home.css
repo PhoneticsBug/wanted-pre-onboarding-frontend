@@ -1,9 +1,9 @@
 .main-box {
     align-self: center;
-    background-color: rgb(204, 204, 204);
+    background-color: rgb(255, 255, 255);
     height: 800px;
     border-radius: 15px;
-    margin: 15%;
+    margin: 8%;
     padding: 20px;
     display: flex;
     flex-direction: column;
@@ -15,9 +15,13 @@
 .title-holder {
     font-size: 100px;
     align-self: center;
+    color: rgb(101, 181, 255);;
 }
 .descriptions {
     font-size: 30px;
+    margin-bottom: 50px;
+    text-align: center;
+
 
 }
 
@@ -30,4 +34,5 @@
     background-color: rgb(101, 181, 255);
     color: white;
     border-color: none;
+    font-weight: bold;
 }

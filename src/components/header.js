@@ -1,13 +1,18 @@
 import React from "react";
 
+import "../styles/header.css"
+
 const Header = ({ isSignedIn, handleLogout }) => {
   return (
-    <div>
-        <p> logo here</p>
+    <div className="header-wrapper">
+        <h1
+          className="logo"> My Plans </h1>
       {isSignedIn ? (
-        <button onClick={handleLogout}>Sign Out</button>
+        <button 
+          onClick={handleLogout}
+          className="sign-out">Sign Out</button>
       ) : (
-        <button>Sign In</button>
+        <></>
       )}
     </div>
   );

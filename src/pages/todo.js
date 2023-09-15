@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-
 import "../styles/todo.css";
 
 const TodoPage = () => {
   const [todos, setTodos] = useState([]);
   const [editingTodo, setEditingTodo] = useState(null);
   const [newTodoText, setNewTodoText] = useState("");
+  const [editingTodoText, setEditingTodoText] = useState(""); // 수정 중인 todo의 텍스트를 따로 관리
 
   const apiUrl = "https://www.pre-onboarding-selection-task.shop/todos";
   const access_token = localStorage.getItem("access_token");
@@ -31,20 +31,17 @@ const TodoPage = () => {
   };
 
   useEffect(() => {
-    // 페이지가 처음 로드될 때 데이터를 불러옴
     fetchData();
-  }, []); // 빈 배열을 전달하여 최초 로드시에만 실행되도록 함
+  }, []);
 
   const handleAddTodo = () => {
     if (newTodoText.trim() === "") {
       return;
     }
-
     const newTodo = {
       todo: newTodoText,
       isCompleted: false,
     };
-
     axios
       .post(apiUrl, newTodo, {
         headers: {
@@ -54,9 +51,8 @@ const TodoPage = () => {
       })
       .then((response) => {
         if (response.status === 201) {
-          // 새로운 todo를 추가하고 상태를 업데이트
           setTodos((prevTodos) => [...prevTodos, response.data]);
-          setNewTodoText(""); // 입력 필드 초기화
+          setNewTodoText("");
         } else {
           console.error("할 일을 추가하는 데 실패했습니다.");
         }
@@ -67,8 +63,10 @@ const TodoPage = () => {
   };
 
   const handleToggleTodo = (todo) => {
-    const updatedTodo = { ...todo, isCompleted: !todo.isCompleted };
-
+    const updatedTodo = {
+      ...todo,
+      isCompleted: !todo.isCompleted,
+    };
     axios
       .put(`${apiUrl}/${todo.id}`, updatedTodo, {
         headers: {
@@ -90,19 +88,17 @@ const TodoPage = () => {
 
   const handleEditClick = (todo) => {
     setEditingTodo(todo);
-    setNewTodoText(todo.todo);
+    setEditingTodoText(todo.todo);
   };
 
   const handleSaveEdit = () => {
-    if (newTodoText.trim() === "") {
+    if (editingTodoText.trim() === "") {
       return;
     }
-
     const updatedTodo = {
-      todo: newTodoText,
+      todo: editingTodoText, // 수정 중인 todo의 텍스트 업데이트
       isCompleted: editingTodo.isCompleted,
     };
-
     axios
       .put(`${apiUrl}/${editingTodo.id}`, updatedTodo, {
         headers: {
@@ -114,7 +110,7 @@ const TodoPage = () => {
         if (response.status === 200) {
           fetchData();
           setEditingTodo(null);
-          setNewTodoText("");
+          setEditingTodoText("");
         } else {
           console.error("할 일을 수정하는 데 실패했습니다.");
         }
@@ -141,47 +137,66 @@ const TodoPage = () => {
 
   return (
     <div className="wrapper">
-      <h1 className="todo-title">This is the Todo page</h1>
-      <div>
-        <input
-          type="text"
-          value={newTodoText}
-          onChange={(e) => setNewTodoText(e.target.value)}
-          placeholder="할 일을 입력하세요"
-        />
-        <button onClick={handleAddTodo}>추가</button>
-      </div>
-      <div>
-        {todos.map((todo) => (
-            <div key={todo.id}>
-            <input
+      <div className="content-box">
+        <h1 className="todo-title">This is the Todo page</h1>
+        <div className="new-todo-wrapper">
+          <input
+            type="text"
+            value={newTodoText}
+            onChange={(e) => setNewTodoText(e.target.value)}
+            placeholder="할 일을 입력하세요"
+            className="new-todo-input"
+          />
+          <button onClick={handleAddTodo} className="new-todo-btn">
+            할일 추가하기
+          </button>
+        </div>
+        <div>
+          {todos.map((todo) => (
+            <div key={todo.id} className="todo-list">
+              <input
                 type="checkbox"
                 checked={todo.isCompleted}
                 onChange={() => handleToggleTodo(todo)}
-            />
-            {editingTodo && editingTodo.id === todo.id ? (
-                <div>
-                <input
+                className="input-checkbox"
+              />
+              {editingTodo && editingTodo.id === todo.id ? (
+                <div className="checkbox-content">
+                  <input
                     type="text"
-                    value={newTodoText}
-                    onChange={(e) => setNewTodoText(e.target.value)}
-                />
-                <button onClick={handleSaveEdit}>저장</button>
+                    value={editingTodoText}
+                    onChange={(e) => setEditingTodoText(e.target.value)}
+                    className="new-todo-input"
+                  />
+                  <button onClick={handleSaveEdit} className="edit-del-btns">
+                    저장
+                  </button>
                 </div>
-            ) : (
-                <span>{todo.todo}</span>
-            )}
-            {editingTodo && editingTodo.id === todo.id ? (
+              ) : (
+                <span className="todo-todo">{todo.todo}</span>
+              )}
+              {editingTodo && editingTodo.id === todo.id ? (
                 null
-            ) : (
-                <>
-                <button onClick={() => handleEditClick(todo)}>수정</button>
-                <button onClick={() => handleDeleteTodo(todo.id)}>삭제</button>
-                </>
-            )}
+              ) : (
+                <div className="edit-del-btns-group">
+                  <button
+                    onClick={() => handleEditClick(todo)}
+                    className="edit-del-btns"
+                  >
+                    수정
+                  </button>
+                  <button
+                    onClick={() => handleDeleteTodo(todo.id)}
+                    className="edit-del-btns"
+                  >
+                    삭제
+                  </button>
+                </div>
+              )}
             </div>
-        ))}
+          ))}
         </div>
+      </div>
     </div>
   );
 };

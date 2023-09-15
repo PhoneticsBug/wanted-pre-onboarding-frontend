@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
+import "../styles/signup.css"
+
 const Signup = () => {
   const navigate = useNavigate();
 
@@ -104,12 +106,15 @@ const handleNameChange=(e)=>setName(e.target.value);
 
 return (
  <div className="signup-page">
+  <h1 className="signup-title"> Sign Up </h1>
+   <div className="signup-form">
    <input 
        data-testid="email-input"
        type="text"
        placeholder="이메일(아이디)"
        value={email}
        onChange={handleEmailChange}
+       className="signup-box"
    />
    <input 
        data-testid="password-input"
@@ -117,6 +122,7 @@ return (
        placeholder="비밀번호"
        value={password}
        onChange={handlePasswordChange}
+       className="signup-box"
    />
    <input 
      data-testid="password-check-input"
@@ -124,18 +130,22 @@ return (
      placeholder="비밀번호 확인"
      value={passwordCheck}
      onChange={handlePasswordCheckChange}
+     className="signup-box"
 />
 <input 
          type="text"
          placeholder="이름"
          value={name}
          onChange={handleNameChange}
+         className="signup-box"
 />
+   </div>
 
 {/* 버튼 클릭 시 onClickSubmit 함수 실행 */}
 <button 
          data-testid="signup-button" 
-         onClick={onClickSubmit}>
+         onClick={onClickSubmit}
+         className="signup-confirm-btn">
 회원가입
 </button>
 </div>

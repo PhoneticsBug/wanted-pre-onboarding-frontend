@@ -1,4 +1,4 @@
-.signin-page {
+.signup-page {
     align-self: center;
     height: 500px;
     margin: 15%;
@@ -8,36 +8,32 @@
     align-items: center;
 }
 
-.signin-title{
+.signup-title{
     margin-bottom: 80px;
     font-size: 100px;
     align-self: center;
     color: rgb(101, 181, 255);;
-
 }
 
-.btn-group {
-    margin-top: 560px;
-    
+.signup-form {
+    align-self: center;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 30px;
 }
 
-.input-box {
+.signup-box {
     width: 325px;
     height: 40px;
     font-size: 25px;
     padding: 5px;
     border-radius: 10px;
-    margin-bottom: 15px;
+    margin-top: 25px;
 }
 
-.btns-box {
-    flex-direction: column;
-    display: flex;
-    align-items: center;
-    margin-top: 15px
-}
-
-.signin-btn {
+.signup-confirm-btn {
     width: 200px;
     height: 45px;;
     font-size: 24px;
@@ -45,17 +41,9 @@
     padding: 5px;
     border-radius: 10px;
     margin: 5px;
-    background-color: rgb(101, 181, 255);
+    background-color: rgb(136, 198, 255);
     color: white;
 }
-
-.signup-btn {
-    margin-top: 8px;
-    background: transparent;
-    border-color: transparent;
-    font-size: 15px;
-    font-weight: bold;
-}
-.signup-btn:hover {
-    color: rgb(101, 181, 255);
+.signup-confirm-btn:hover {
+    background-color: rgb(103, 199, 255);
 }

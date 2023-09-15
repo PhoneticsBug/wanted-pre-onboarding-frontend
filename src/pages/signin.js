@@ -48,12 +48,14 @@ const Signin = ({ setIsSignedIn }) => {
     <div className="signin-page">
       <div className="input-box">
         <h1 className="signin-title"> Sign in </h1>
-        <input
+       <div>
+       <input
           data-testid="email-input"
           type="text"
           placeholder="이메일(아이디)"
           value={email}
           onChange={handleEmailChange}
+          className="input-box"
         />
         <input
           data-testid="password-input"
@@ -61,21 +63,25 @@ const Signin = ({ setIsSignedIn }) => {
           placeholder="비밀번호"
           value={password}
           onChange={handlePasswordChange}
+          className="input-box"
          />
        </div>
-
-       {/* 버튼 클릭 시 onClickSubmit 함수 실행 */}
-       <div className="btn-group">
+         <div className="btns-box">
          <button
-           data-testid="signin-button"
-           onClick={onClickSubmit}
-           disabled={!isEmailValid || !isPasswordValid} // 유효성 검사 결과에 따라 버튼 비활성화 처리
-         >
-           로그인
-         </button>
-         <button data-testid="signup-button" onClick={SignUp}>
-           회원가입
-         </button>
+                data-testid="signin-button"
+                onClick={onClickSubmit}
+                disabled={!isEmailValid || !isPasswordValid}
+                className="signin-btn"
+              >
+                로그인
+              </button>
+              <button 
+                data-testid="signup-button" 
+                onClick={SignUp}
+                className="signup-btn">
+                회원가입
+              </button>
+         </div>
        </div>
      </div>
    );
