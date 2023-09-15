@@ -44,6 +44,9 @@
     background-color: rgb(101, 181, 225);
     color: white;
 }
+.new-todo-btn:hover {
+    background-color: rgb(76, 234, 255);
+}
 
 .todo-list {
     display: flex;
@@ -99,6 +102,9 @@
     background-color: rgb(101, 181, 225);
     color: white;
     border-radius: 8px;
+}
+.edit-del-btns:hover {
+    background-color: rgb(76, 234, 255);
 }
 
 .todo-input {

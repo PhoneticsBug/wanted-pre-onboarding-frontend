@@ -1,12 +1,16 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
 import "../styles/header.css"
 
 const Header = ({ isSignedIn, handleLogout }) => {
   return (
     <div className="header-wrapper">
-        <h1
-          className="logo"> My Plans </h1>
+        <Link to="/" className="logo">
+        <button
+          className="logo">
+            My Plans</button>
+        </Link>
       {isSignedIn ? (
         <button 
           onClick={handleLogout}

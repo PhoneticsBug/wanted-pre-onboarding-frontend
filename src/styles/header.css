@@ -8,8 +8,16 @@
 }
 
 .logo {
+    background-color: transparent;
+    border-color: transparent;
     color: rgb(101, 181, 255);
-    margin-left: ;
+    font-size: 34px;
+    height: 40px;
+    font-weight: bolder;
+
+}
+.logo:hover {
+    color: rgb(76, 234, 255);
 }
 
 .sign-out {
