@@ -5,13 +5,14 @@
 }
 .content-box {
     align-self: center;
-    width: 80%;
+    width: 900px;
     left: 0;
     right: ;
     margin: 0 auto;
     justify-content: center;
     display: table-column;
     padding: 5%;
+    padding-top: 15%;
     padding-left: 15%;
     padding-right: 15%;
     /* margin-left: 10vh; */
