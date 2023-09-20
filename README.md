@@ -19,8 +19,6 @@ Here's simple way to see how this website works.
 
 If you want to see front-end part only, you can simply do it by clicking this link.
 
-[![Video](/public/video_preview.jpg)](https://www.youtube.com/watch?v=rqPot-9QICw&ab_channel=IliyaCheon)
-
 ### How To Use
 
 Or, if you want to see full code, you can clone this repository and try this.
@@ -43,7 +41,7 @@ npm start
 ```
 ### Showcase
 Here's a brief video of how this website works.
-
+[![Video](/public/video_preview.jpg)](https://www.youtube.com/watch?v=rqPot-9QICw&ab_channel=IliyaCheon)
 
 
 # Getting Started with Create React App
