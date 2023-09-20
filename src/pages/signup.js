@@ -50,7 +50,7 @@ function Signup() {
       .then(() => {
         setLoading(false);
 
-        navigate("/home");
+        navigate("/");
         setMsg("Signup successful!");
 
         alert("가입이 완료되었습니다.");
