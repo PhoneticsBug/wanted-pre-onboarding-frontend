@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 
 import "../styles/home.css";
 
-const HomePage = () => {
+function HomePage() {
   const navigate = useNavigate();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
@@ -16,7 +16,7 @@ const HomePage = () => {
     }
   }, [navigate]);
 
-  const LoginButton = () => {
+  function LoginButton() {
     return (
       <button
         onClick={() => navigate("/signin")}
@@ -25,14 +25,15 @@ const HomePage = () => {
         Sign in
       </button>
     );
-  };
+  }
 
   return (
     <>
       <div className="main-box">
         <h1 
           className="title-holder"> 
-          My Plans </h1>
+          My Plans 
+        </h1>
         <div className="descriptions">
           <h3> You can manage your todo-list via using this service. </h3>
           <span> Sign in is required for using this website </span>
@@ -41,6 +42,6 @@ const HomePage = () => {
       </div>
     </>
   );
-};
+}
 
 export default HomePage;

@@ -88,7 +88,7 @@ const TodoPage = () => {
 
   const handleEditClick = (todo) => {
     setEditingTodo(todo);
-    setEditingTodoText(todo.todo);
+    setEditingTodoText(todo.todo); // 수정 모드로 들어갈 때 현재 텍스트를 저장
   };
 
   const handleSaveEdit = () => {
@@ -120,6 +120,13 @@ const TodoPage = () => {
       });
   };
 
+  // 수정 모드 취소 처리
+  const handleCancelEdit = () => {
+    // 이전 내용으로 돌아가기 위해 상태를 이전 텍스트로 설정
+    setEditingTodoText(editingTodo.todo);
+    setEditingTodo(null);
+  };
+
   const handleDeleteTodo = (todoId) => {
     axios
       .delete(`${apiUrl}/${todoId}`, {
@@ -138,7 +145,7 @@ const TodoPage = () => {
   return (
     <div className="wrapper">
       <div className="content-box">
-        <h1 className="todo-title">This is the Todo page</h1>
+        <h1 className="todo-title">My Todo Page</h1>
         <div className="new-todo-wrapper">
           <input
             type="text"
@@ -146,14 +153,18 @@ const TodoPage = () => {
             onChange={(e) => setNewTodoText(e.target.value)}
             placeholder="할 일을 입력하세요"
             className="new-todo-input"
+            data-testid="new-todo-input"
           />
-          <button onClick={handleAddTodo} className="new-todo-btn">
-            할일 추가하기
+          <button 
+            onClick={handleAddTodo} 
+            className="new-todo-btn"
+            data-testid="new-todo-add-button">
+            추가
           </button>
         </div>
         <div>
           {todos.map((todo) => (
-            <div key={todo.id} className="todo-list">
+            <il key={todo.id} className="todo-list">
               <input
                 type="checkbox"
                 checked={todo.isCompleted}
@@ -166,10 +177,20 @@ const TodoPage = () => {
                     type="text"
                     value={editingTodoText}
                     onChange={(e) => setEditingTodoText(e.target.value)}
-                    className="new-todo-input"
+                    className="edit-todo-input"
+                    data-testid="modify-input"
                   />
-                  <button onClick={handleSaveEdit} className="edit-del-btns">
-                    저장
+                  <button 
+                    onClick={handleSaveEdit} 
+                    className="edit-del-btns"
+                    data-testid="submit-button">
+                    제출
+                  </button>
+                  <button 
+                    onClick={handleCancelEdit} 
+                    className="edit-del-btns"
+                    data-testid="cancel-button">
+                    취소
                   </button>
                 </div>
               ) : (
@@ -182,18 +203,20 @@ const TodoPage = () => {
                   <button
                     onClick={() => handleEditClick(todo)}
                     className="edit-del-btns"
+                    data-testid="modify-button"
                   >
                     수정
                   </button>
                   <button
                     onClick={() => handleDeleteTodo(todo.id)}
                     className="edit-del-btns"
+                    data-testid="delete-button"
                   >
                     삭제
                   </button>
                 </div>
               )}
-            </div>
+            </il>
           ))}
         </div>
       </div>
