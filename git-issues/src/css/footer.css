@@ -1,0 +1,9 @@
+.footer-box {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    align-items: flex-end;
+    gap: 30px;
+    padding-left: 30px;
+    padding-right: 30px;
+}

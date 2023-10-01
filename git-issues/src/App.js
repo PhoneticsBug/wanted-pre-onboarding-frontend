@@ -1,25 +1,26 @@
-import logo from './logo.svg';
+import React, { useState, useEffect } from "react";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
 import './App.css';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
-}
+// pages
+import MainPage from './pages/index.js'
 
+// components
+import Header from './components/header.js'
+import Footer from './components/footer.js'
+
+const App = () => {
+  const [isValid, setIsValid] = useState("");
+
+  return (
+    <BrowserRouter>
+    <Header/>
+      <Routes>
+        <Route path="/" element={<MainPage/>} />
+        {/* <Route path="" element={}/> */}
+      </Routes>
+      <Footer/>
+    </BrowserRouter>
+  );
+};
 export default App;

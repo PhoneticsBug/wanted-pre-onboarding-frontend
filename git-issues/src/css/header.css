@@ -1,0 +1,9 @@
+.header-box {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.logo {
+    color: rgb(95, 191, 251);
+}
