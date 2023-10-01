@@ -4,6 +4,7 @@ import './App.css';
 
 // pages
 import MainPage from './pages/index.js'
+import LogsPage from './pages/logs.js'
 
 // components
 import Header from './components/header.js'
@@ -19,7 +20,7 @@ const App = () => {
       <Header/>
         <Routes>
           <Route path="/" element={<MainPage/>} />
-          {/* <Route path="" element={}/> */}
+          <Route path="/logs" element={<LogsPage/>}/>
         </Routes>
       <Footer/>
     </BrowserRouter>
