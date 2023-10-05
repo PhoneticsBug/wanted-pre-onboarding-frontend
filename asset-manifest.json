@@ -1,0 +1,15 @@
+{
+  "files": {
+    "main.css": "/PhoneticsBug/wanted-pre-onboarding-frontend/static/css/main.936a4489.css",
+    "main.js": "/PhoneticsBug/wanted-pre-onboarding-frontend/static/js/main.9143731e.js",
+    "static/js/787.3ae1f680.chunk.js": "/PhoneticsBug/wanted-pre-onboarding-frontend/static/js/787.3ae1f680.chunk.js",
+    "index.html": "/PhoneticsBug/wanted-pre-onboarding-frontend/index.html",
+    "main.936a4489.css.map": "/PhoneticsBug/wanted-pre-onboarding-frontend/static/css/main.936a4489.css.map",
+    "main.9143731e.js.map": "/PhoneticsBug/wanted-pre-onboarding-frontend/static/js/main.9143731e.js.map",
+    "787.3ae1f680.chunk.js.map": "/PhoneticsBug/wanted-pre-onboarding-frontend/static/js/787.3ae1f680.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.936a4489.css",
+    "static/js/main.9143731e.js"
+  ]
+}
